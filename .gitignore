@@ -1,0 +1,34 @@
+# ----------------------
+# Environment variables
+# ----------------------
+.env
+/ISABEL/.env
+
+# ----------------------
+# Python cache / bytecode
+# ----------------------
+__pycache__/
+*.pyc
+/ISABEL/__pycache__/
+
+# ----------------------
+# IDE / editor files
+# ----------------------
+/.idea/
+/workspace.xml
+/shelf/
+/ISABEL/.idea
+
+# ----------------------
+# Application data (non-source)
+# ----------------------
+
+
+# ----------------------
+# Documentation / wiki
+# ----------------------
+
+
+# ----------------------
+# Web Console
+# ----------------------
