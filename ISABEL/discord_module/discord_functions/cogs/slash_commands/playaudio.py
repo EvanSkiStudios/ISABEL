@@ -12,7 +12,6 @@ class PlayAudio(commands.Cog):
         self.bot = bot
 
         # Compute the path to the MP3 relative to this file
-        # Current file: ...\discord_functions\cogs\slash_commands\playaudio.py
         self.audio_file = (
                 Path(__file__)
                 .parent.parent.parent.parent.parent / "discord_voice_module" / "assets" / "test" / "nekomonogatari.mp3"
