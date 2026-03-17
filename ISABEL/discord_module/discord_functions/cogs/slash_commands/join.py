@@ -22,6 +22,8 @@ class Join(commands.Cog):
             channel = interaction.user.voice.channel
             await channel.connect()
             await interaction.followup.send(f"I have joined the voice channel: {channel.name}")
+
+
         else:
             await interaction.followup.send("You are not in a voice channel!")
 
