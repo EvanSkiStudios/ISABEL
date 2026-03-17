@@ -18,11 +18,16 @@ class MyBot(commands.Bot):
         # Load cogs here
         cogs = [
             "discord_module.discord_functions.cogs.bot_commands",
-            "discord_module.discord_functions.cogs.slash_commands.parrot",
-            # "discord_module.discord_functions.cogs.slash_commands.tts",
+            "discord_module.discord_functions.cogs.slash_commands.join",
+            "discord_module.discord_functions.cogs.slash_commands.leave",
+            "discord_module.discord_functions.cogs.slash_commands.playaudio",
         ]
         for cog in cogs:
             await self.load_extension(cog)
+
+        guild = discord.Object(id=CONFIG.SERVERS.TEST_SERVER_ID)
+        self.tree.copy_global_to(guild=guild)  # copy any global commands
+        await self.tree.sync(guild=guild)  # sync them instantly
 
         # Global (takes time to propagate)
         await self.tree.sync()
@@ -30,7 +35,7 @@ class MyBot(commands.Bot):
 
 def create_bot():
     bot = MyBot(
-        command_prefix=["$s "],
+        command_prefix=["$I "],
         intents=intents,
         status=discord.Status.online
     )
