@@ -1,7 +1,7 @@
 import asyncio
 from discord import app_commands
 from discord.ext import commands, voice_recv
-from discord_voice_module.voice_listener import MySink, VoiceListener, monitor_silence
+
 from utility_scripts.system_logging import setup_logger
 
 # configure logging
@@ -21,7 +21,7 @@ class Join(commands.Cog):
 
         if interaction.user.voice:
             channel = interaction.user.voice.channel
-            sink = MySink()
+            sink = UserAudioSink()
 
             # handle existing connection
             vc = interaction.guild.voice_client
@@ -31,18 +31,16 @@ class Join(commands.Cog):
                 await interaction.followup.send(f"Moved to: {channel.name}")
             else:
                 # connect first without passing the sink
-                vc: voice_recv.VoiceRecvClient = await channel.connect(
+                voice_client = await channel.connect(
                     cls=voice_recv.VoiceRecvClient,
                     self_deaf=False
                 )
 
                 # attach the sink after connection
-                vc.listen(sink)
+                await asyncio.sleep(1)
+                voice_client.listen(sink)
 
                 await interaction.followup.send(f"Joined: {channel.name}")
-
-                # start monitoring silence
-                asyncio.create_task(monitor_silence(sink))
         else:
             await interaction.followup.send("You are not in a voice channel!")
 

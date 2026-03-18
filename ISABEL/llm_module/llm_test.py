@@ -3,6 +3,7 @@ from ollama import chat
 
 from llm_module.llm_create import LLM_CONFIG, llm_create
 from llm_module.system_prompts import personality_system_prompt
+from tts_module.elevenlabs_voice import text_to_speech
 from utility_scripts.system_logging import setup_logger
 
 # configure logging
@@ -44,16 +45,17 @@ async def llm_test_generate(user_input):
     return response.message.content
 
 
-def input_loop():
+async def input_loop():
     while True:
         user_input = input("> ").lower()
         if user_input == "/exit":
             break
 
-        response = asyncio.run(llm_test_generate(user_input))
+        response = await llm_test_generate(user_input)
         logger.info(response)
+        # await text_to_speech(response)
 
 
 if __name__ == "__main__":
     llm_create()
-    input_loop()
+    asyncio.run(input_loop())
