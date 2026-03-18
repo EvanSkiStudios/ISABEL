@@ -21,6 +21,7 @@ class MyBot(commands.Bot):
             "discord_module.discord_functions.cogs.slash_commands.join",
             "discord_module.discord_functions.cogs.slash_commands.leave",
             "discord_module.discord_functions.cogs.slash_commands.playaudio",
+            "discord_module.discord_functions.cogs.slash_commands.record",
             "discord_module.discord_functions.cogs.slash_commands.tts",
         ]
         for cog in cogs:

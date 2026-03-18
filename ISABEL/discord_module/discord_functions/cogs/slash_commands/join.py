@@ -1,4 +1,3 @@
-import asyncio
 from discord import app_commands
 from discord.ext import commands, voice_recv
 
@@ -21,25 +20,14 @@ class Join(commands.Cog):
 
         if interaction.user.voice:
             channel = interaction.user.voice.channel
-            sink = UserAudioSink()
 
-            # handle existing connection
             vc = interaction.guild.voice_client
             if vc:
                 if vc.channel != channel:
                     await vc.move_to(channel)
                 await interaction.followup.send(f"Moved to: {channel.name}")
             else:
-                # connect first without passing the sink
-                voice_client = await channel.connect(
-                    cls=voice_recv.VoiceRecvClient,
-                    self_deaf=False
-                )
-
-                # attach the sink after connection
-                await asyncio.sleep(1)
-                voice_client.listen(sink)
-
+                await channel.connect()
                 await interaction.followup.send(f"Joined: {channel.name}")
         else:
             await interaction.followup.send("You are not in a voice channel!")
