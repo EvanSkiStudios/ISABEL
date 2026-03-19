@@ -18,11 +18,19 @@ class MyBot(commands.Bot):
         # Load cogs here
         cogs = [
             "discord_module.discord_functions.cogs.bot_commands",
+            "discord_module.discord_functions.cogs.slash_commands.analyze",
+            "discord_module.discord_functions.cogs.slash_commands.cache",
+            "discord_module.discord_functions.cogs.slash_commands.delete",
+            "discord_module.discord_functions.cogs.slash_commands.help",
             "discord_module.discord_functions.cogs.slash_commands.join",
-            "discord_module.discord_functions.cogs.slash_commands.leave",
+            "discord_module.discord_functions.cogs.slash_commands.neuralize",
+            "discord_module.discord_functions.cogs.slash_commands.parrot",
             "discord_module.discord_functions.cogs.slash_commands.playaudio",
             "discord_module.discord_functions.cogs.slash_commands.record",
+            "discord_module.discord_functions.cogs.slash_commands.search",
+            "discord_module.discord_functions.cogs.slash_commands.status",
             "discord_module.discord_functions.cogs.slash_commands.tts",
+            "discord_module.discord_functions.cogs.slash_commands.weather"
         ]
         for cog in cogs:
             await self.load_extension(cog)
@@ -44,4 +52,3 @@ def create_bot():
 
     register_events(bot)
     return bot
-
