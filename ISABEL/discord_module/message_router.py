@@ -8,9 +8,9 @@ COMMAND_PREFIXES = ["$s "]
 
 
 def is_keyword_trigger(message_content: str) -> bool:
-    if re.search(r"\bsam[\s,.?!]", message_content, re.IGNORECASE):
+    if re.search(r"\bisabel[\s,.?!]", message_content, re.IGNORECASE):
         return True
-    if message_content.lower().endswith("sam"):
+    if message_content.lower().endswith("isabel"):
         return True
     return False
 

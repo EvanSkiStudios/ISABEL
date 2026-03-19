@@ -1,5 +1,6 @@
 import asyncio
 
+from discord_module.message_router import route_message
 from utility_scripts.system_logging import setup_logger
 
 
@@ -26,5 +27,6 @@ def register_events(bot):
 
     @bot.event
     async def on_message(message):
-        pass
+        async with lock:
+            await route_message(bot, message)
 

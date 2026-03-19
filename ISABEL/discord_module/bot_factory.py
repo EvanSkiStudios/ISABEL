@@ -26,7 +26,6 @@ class MyBot(commands.Bot):
             "discord_module.discord_functions.cogs.slash_commands.neuralize",
             "discord_module.discord_functions.cogs.slash_commands.parrot",
             "discord_module.discord_functions.cogs.slash_commands.playaudio",
-            "discord_module.discord_functions.cogs.slash_commands.record",
             "discord_module.discord_functions.cogs.slash_commands.search",
             "discord_module.discord_functions.cogs.slash_commands.status",
             "discord_module.discord_functions.cogs.slash_commands.tts",

@@ -20,7 +20,6 @@ load_dotenv()
 config_dict = {
     "THREADS_ALLOW": {
         "GMCD_CHANNEL_ID": os.getenv("GMCD_CHANNEL_ID"),
-        "TEST_THREAD_ID": os.getenv("TEST_THREAD_ID"),
         "TEST_CHANNEL_ID": os.getenv("TEST_CHANNEL_ID")
     },
     "BOTS": {
