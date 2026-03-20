@@ -23,6 +23,7 @@ class MyBot(commands.Bot):
             "discord_module.discord_functions.cogs.slash_commands.delete",
             "discord_module.discord_functions.cogs.slash_commands.help",
             "discord_module.discord_functions.cogs.slash_commands.join",
+            "discord_module.discord_functions.cogs.slash_commands.leave",
             "discord_module.discord_functions.cogs.slash_commands.neuralize",
             "discord_module.discord_functions.cogs.slash_commands.parrot",
             "discord_module.discord_functions.cogs.slash_commands.playaudio",
