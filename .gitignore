@@ -24,3 +24,4 @@ __pycache__/
 # ----------------------
 /assets
 /ISABEL/message_logs/logs
+/ISABEL/message_logs/references
