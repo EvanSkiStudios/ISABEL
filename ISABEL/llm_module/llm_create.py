@@ -26,10 +26,11 @@ def ns(d: dict) -> SimpleNamespace:
 llm_config = {
     "ISABEL": {
         "MODEL_NAME": "ISABEL",
-        "OLLAMA_MODEL": "nemotron-3-nano:4b",
+        # "OLLAMA_MODEL": "nemotron-3-nano:4b",
+        "OLLAMA_MODEL": "huihui_ai/deepseek-r1-abliterated",
         "VISION_MODEL": "qwen3-vl:4b",
         "DEFAULT_CONTEXT": 8192,
-        "DEFAULT_TEMPERATURE": 0.3
+        "DEFAULT_TEMPERATURE": 0.6
     }
 }
 LLM_CONFIG = ns(llm_config)

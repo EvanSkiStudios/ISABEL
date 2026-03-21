@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 
 from discord_module.utilities.attachments.bot_user_attachment_ignore_list import ignore_bot_attachment
 from discord_module.utilities.attachments.mimetype_handler import parse_mime_type
+from discord_module.utilities.attachments.whisper_manager import whisper_transcribe
 from utility_scripts.system_logging import setup_logger
 
 # configure logging
@@ -114,10 +115,9 @@ def download_attachments(message_attachments: list) -> dict:
 
 
 async def digest_attachments(message_attachments):
-    print(message_attachments)
-
     text_data = []
     image_data = []
+    audio_text = []
 
     for filename, attachment in message_attachments.items():
         file_path = attachment["filepath"]
@@ -146,12 +146,21 @@ async def digest_attachments(message_attachments):
             os.remove(file_path)
             continue
 
+        # allowed audio
+        if media_type == "audio":
+            transcribed_text = await whisper_transcribe(file_path)
+            audio_text.append(transcribed_text)
+
         # fallback: anything else gets deleted
         if os.path.exists(file_path):
             os.remove(file_path)
             continue
 
-    return text_data, image_data
+    return {
+        "text": text_data,
+        "image": image_data,
+        "audio": audio_text
+    }
 
 
 def cleanup_image_file(image_list):

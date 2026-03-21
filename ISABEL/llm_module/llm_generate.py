@@ -1,5 +1,6 @@
 import asyncio
 import copy
+import re
 
 from discord_module.utilities.attachments.discord_attachments_manager import digest_attachments, cleanup_image_file
 from discord_module.utilities.split_message import split_response
@@ -22,12 +23,27 @@ async def sort_attachments(attachments):
     text_data = None
     text_data_string = None
     image_data = None
+    audio_data = None
+    audio_data_string = None
+
     if attachments:
-        text_data, image_data = await digest_attachments(attachments)
+        attachment_data = await digest_attachments(attachments)
+
+        text_data = attachment_data["text"]
+        image_data = attachment_data["image"]
+        audio_data = attachment_data["audio"]
+
     if text_data is not None:
         text_data_string = "".join(text_data)
 
-    return text_data_string, image_data
+    if audio_data is not None:
+        audio_data_string = "".join(audio_data)
+
+    return {
+        "text": text_data_string,
+        "image": image_data,
+        "audio": audio_data_string
+    }
 
 
 async def build_system_prompt(bot, message, message_cache, file_data):
@@ -40,10 +56,19 @@ async def build_system_prompt(bot, message, message_cache, file_data):
     user_content = await process_message(bot, message)
 
     user_prompt = copy.deepcopy(user_content)
+
+    audio_data = file_data["audio"]
+    if audio_data:
+        if user_prompt["content"] == "" or re.search(r"\bisabel\b", user_prompt["content"], re.IGNORECASE):
+            user_prompt["content"] = audio_data
+
     formated_content = "(NEW MESSAGE TO RESPOND TO): " + user_prompt["content"]
     user_prompt["content"] = formated_content
 
     cached_user_message = copy.deepcopy(user_content)
+
+    if audio_data:
+        cached_user_message["content"] = audio_data
 
     # File data
     text_data = file_data["text"]
@@ -69,17 +94,15 @@ async def build_system_prompt(bot, message, message_cache, file_data):
 async def llm_generate_response(bot, message, attachments=None):
     message_cache = await get_channel_message_cache(bot, message)
 
-    text_data, image_data = await sort_attachments(attachments)
-    file_data = {
-        "text": text_data,
-        "image": image_data
-    }
+    attachment_data = await sort_attachments(attachments)
 
-    full_prompt, system_prompt, message_cache, cached_user_message = await build_system_prompt(bot, message, message_cache, file_data)
+    full_prompt, system_prompt, message_cache, cached_user_message = await build_system_prompt(bot, message, message_cache, attachment_data)
 
     response = await llm_generate_chat_response(full_prompt, system_prompt, message_cache)
 
     response["user"] = cached_user_message
+
+    text_data = attachment_data["text"]
     response["file_txt"] = text_data
 
     return response

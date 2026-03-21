@@ -35,7 +35,9 @@ class MyBot(commands.Bot):
         for cog in cogs:
             await self.load_extension(cog)
 
-        guild = discord.Object(id=CONFIG.SERVERS.TEST_SERVER_ID)
+        # guild = discord.Object(id=CONFIG.SERVERS.TEST_SERVER_ID)
+        guild = discord.Object(id=CONFIG.SERVERS.GMCD_SERVER_ID)
+
         self.tree.copy_global_to(guild=guild)  # copy any global commands
         await self.tree.sync(guild=guild)  # sync them instantly
 

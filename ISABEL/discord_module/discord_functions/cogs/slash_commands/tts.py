@@ -20,11 +20,21 @@ class TTS(commands.Cog):
         self.client = client
 
     @app_commands.command(name="tts", description="text to speech")
-    async def tts(self, interaction, text: str):
-        logger.debug(f'Command issued: tts by {interaction.user}, {text}')
+    @app_commands.describe(voice="Choose a voice")
+    @app_commands.choices(voice=[
+        app_commands.Choice(name="ISABEL", value="ISABEL"),
+        app_commands.Choice(name="SAM", value="SAM"),
+        app_commands.Choice(name="Gilbert", value="GILBERT"),
+        app_commands.Choice(name="Colt 45", value="COLT"),
+        app_commands.Choice(name="Hermaeus Mora", value="HERMA"),
+    ])
+    async def tts(self, interaction, text: str, voice: app_commands.Choice[str] = None):
+        logger.debug(f'Command issued: tts by {interaction.user}, {text}, voice={voice}')
         await interaction.response.defer()
 
-        tts_file = await text_to_speech(text, file_name=text)
+        selected_voice = voice.value if voice else None
+
+        tts_file = await text_to_speech(text, file_name=text, voice=selected_voice)
         if not tts_file:
             logger.error('TTS Error')
 
