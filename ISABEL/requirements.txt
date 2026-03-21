@@ -8,4 +8,8 @@ regex~=2024.11.6
 elevenlabs~=2.15.0
 pytest~=8.4.2
 Flask~=3.1.2
-discord.py~=2.6.4
+discord.py~=2.7.1
+
+openai-whisper~=20250625
+pillow~=12.1.1
+opuslib~=3.0.1
