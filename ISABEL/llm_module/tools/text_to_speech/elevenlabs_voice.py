@@ -4,7 +4,7 @@ import re
 
 from dotenv import load_dotenv
 from elevenlabs.client import ElevenLabs
-from elevenlabs import play, VoiceSettings
+from elevenlabs import VoiceSettings
 from elevenlabs.core.api_error import ApiError
 from utility_scripts.system_logging import setup_logger
 
@@ -94,10 +94,3 @@ async def text_to_speech(text: str, file_name='text_to_speech', voice="default")
     # Run the blocking code in a separate thread
     file_path = await asyncio.to_thread(_blocking_tts)
     return file_path
-
-
-# Optional: play it too
-# if file_path:
-#     with open(file_path, "rb") as f:
-#         play(f.read())
-

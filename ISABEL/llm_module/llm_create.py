@@ -28,6 +28,7 @@ llm_config = {
         "MODEL_NAME": "ISABEL",
         "OLLAMA_MODEL": "huihui_ai/deepseek-r1-abliterated",
         "VISION_MODEL": "qwen3-vl:4b",
+        "TOOL_MODEL": "qwen3-vl:4b",
         "DEFAULT_CONTEXT": 8192,
         "DEFAULT_TEMPERATURE": 0.6
     }
@@ -41,7 +42,9 @@ def get_llm_config():
 
 def llm_create():
     try:
-        client = Client()
+        client = Client(
+            headers={"Authorization": f"Bearer {os.getenv('OLLAMA_API')}"}
+        )
         response = client.create(
             model=LLM_CONFIG.ISABEL.MODEL_NAME,
             from_=LLM_CONFIG.ISABEL.OLLAMA_MODEL,

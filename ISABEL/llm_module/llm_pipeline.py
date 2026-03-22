@@ -3,6 +3,7 @@ import asyncio
 from discord_module.utilities.discord_bot_users_ratelimit import bot_message_cooldown
 from discord_module.utilities.attachments.discord_attachments_manager import download_attachments
 from llm_module.llm_generate import llm_generate_response
+from llm_module.tools.web_search.web_tool import llm_internet_search
 
 from message_logs.log_message import log_message
 
@@ -134,8 +135,8 @@ async def _generate_response(bot, message, message_content):
         # ---------------------------------
         case "search":
             logger.info("Web search triggered")
-            # return await llm_internet_search(message_content)
-            return await llm_generate_response(bot, message)
+            tool_calls = await llm_internet_search(bot, message)
+            return await llm_generate_response(bot, message, tool_calls=tool_calls)
 
         # ---------------------------------
         # default chat

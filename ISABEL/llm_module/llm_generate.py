@@ -91,12 +91,16 @@ async def build_system_prompt(bot, message, message_cache, file_data):
 
 
 # Main entry point
-async def llm_generate_response(bot, message, attachments=None):
+async def llm_generate_response(bot, message, attachments=None, tool_calls=None):
     message_cache = await get_channel_message_cache(bot, message)
 
     attachment_data = await sort_attachments(attachments)
 
     full_prompt, system_prompt, message_cache, cached_user_message = await build_system_prompt(bot, message, message_cache, attachment_data)
+
+    # add tool_call message to the cache
+    if tool_calls:
+        message_cache.append(tool_calls)
 
     response = await llm_generate_chat_response(full_prompt, system_prompt, message_cache)
 
