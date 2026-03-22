@@ -46,7 +46,9 @@ async def sort_attachments(attachments):
     }
 
 
-async def build_system_prompt(bot, message, message_cache, file_data):
+async def build_system_prompt(bot, message, prompt_data):
+    message_cache = prompt_data["message_cache"]
+    file_data = prompt_data["attachment_data"]
 
     system_prompt = {
         "role": "system", "content":
@@ -76,6 +78,13 @@ async def build_system_prompt(bot, message, message_cache, file_data):
         user_prompt["content"] += text_data
         cached_user_message["content"] += text_data
 
+    # Tool_calls
+    tool_results = prompt_data["tool_calls"]
+    if tool_results:
+        for result in tool_results:
+            user_prompt["content"] += result
+            cached_user_message["content"] += result
+
     # Images
     image_data = file_data["image"]
     if image_data:
@@ -87,7 +96,12 @@ async def build_system_prompt(bot, message, message_cache, file_data):
         user_prompt
     ]
 
-    return full_prompt, system_prompt, message_cache, cached_user_message
+    return {
+        "full_prompt": full_prompt,
+        "system_prompt": system_prompt,
+        "message_cache": message_cache,
+        "cached_user_message": cached_user_message
+    }
 
 
 # Main entry point
@@ -96,11 +110,18 @@ async def llm_generate_response(bot, message, attachments=None, tool_calls=None)
 
     attachment_data = await sort_attachments(attachments)
 
-    full_prompt, system_prompt, message_cache, cached_user_message = await build_system_prompt(bot, message, message_cache, attachment_data)
+    prompt_info = {
+        "message_cache": message_cache,
+        "attachment_data": attachment_data,
+        "tool_calls": tool_calls
+    }
 
-    # add tool_call message to the cache
-    if tool_calls:
-        message_cache.append(tool_calls)
+    prompt_data = await build_system_prompt(bot, message, prompt_info)
+
+    full_prompt = prompt_data["full_prompt"]
+    system_prompt = prompt_data["system_prompt"]
+    message_cache = prompt_data["message_cache"]
+    cached_user_message = prompt_data["cached_user_message"]
 
     response = await llm_generate_chat_response(full_prompt, system_prompt, message_cache)
 

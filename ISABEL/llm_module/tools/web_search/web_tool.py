@@ -1,5 +1,7 @@
 import asyncio
 import os
+from logging import exception
+
 from dotenv import load_dotenv
 
 from llm_module.llm_instance import get_client
@@ -21,7 +23,7 @@ os.environ["OLLAMA_API_KEY"] = os.getenv("OLLAMA_API")
 CONFIG = LLM_CONFIG.ISABEL
 
 
-async def llm_internet_search(bot, message):
+async def llm_internet_search(bot, message) -> list:
     client = get_client()
 
     # Map tool names to actual functions
@@ -55,17 +57,25 @@ async def llm_internet_search(bot, message):
         stream=False
     )
 
+    # todo -- add these and the token info to the logs
     # print response info
     if response.message.thinking:
-        print('Thinking: ', response.message.thinking)
+        # print('Thinking: ', response.message.thinking)
+        pass
     if response.message.content:
-        print('Content: ', response.message.content)
+        # print('Content: ', response.message.content)
+        pass
 
     # manage tools
+    tool_calls = []
+
     if response.message.tool_calls:
-        print('Tool calls: ', response.message.tool_calls)
+        logger.debug(f'Tool calls: {response.message.tool_calls}')
         # get tool from called tools
         for tool_call in response.message.tool_calls:
+
+            header = f'```--- {tool_call.function.name} Result ---\n'
+            footer = '\n```'
 
             function_to_call = TOOLS.get(tool_call.function.name)
             if function_to_call:
@@ -76,30 +86,20 @@ async def llm_internet_search(bot, message):
                 # get first result
                 first_result = result.results[0]  # get the first WebSearchResult
                 first_content = first_result.content  # get the content
-                print(first_content)
+                logger.debug(first_content[:200])
 
-                # todo -- Chat Model is not using the results of the tool call
-                # will have to pass it in a system prompt probably
+                result_string = header + first_content + footer
 
-                return {'role': 'tool', 'content': first_content, 'tool_name': tool_call.function.name}
+                tool_calls.append(result_string)
 
             else:
-                return {'role': 'tool', 'content': f'Tool {tool_call.function.name} not found', 'tool_name': tool_call.function.name}
+                raise InvalidToolError(tool_call.function, tool_call.function.name)
+
+    return tool_calls
 
 
-if __name__ == "__main__":
-
-    class FakeMessage:
-        def __init__(self, content):
-            self.content = content
-
-    # Create a client with your API key
-    client = Client(
-        host="https://ollama.com",  # required for cloud API
-        headers={"Authorization": f"Bearer {os.getenv('OLLAMA_API')}"}
-    )
-
-    msg = FakeMessage("search the internet for the current stock price of nvidia")
-
-    response = asyncio.run(llm_internet_search(None, msg))
-    logger.info(response)
+class InvalidToolError(Exception):
+    """Exception raised for invalid age values in a specific application."""
+    def __init__(self, tool, message="Tool Not Found"):
+        self.tool = tool
+        super().__init__(f'Tool: {message} Not found or Invalid')
