@@ -54,8 +54,8 @@ def get_message_attachments(message):
 
 
 # set max image size
-MAX_WIDTH = 1024
-MAX_HEIGHT = 1024
+MAX_WIDTH = 672
+MAX_HEIGHT = 448
 
 
 def download_attachments(message_attachments: list) -> dict:

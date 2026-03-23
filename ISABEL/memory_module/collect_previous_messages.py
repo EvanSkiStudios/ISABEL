@@ -4,6 +4,10 @@ from discord_module.message_filters import bots_blacklist, message_is_slash_repl
 from memory_module.process_message import process_message
 
 
+# todo -- Conversation history is really effecting prompt generation and the time it takes to process things
+# todo -- Need better way to handle chats from multiple users
+
+
 # filters message based on rules
 async def skip_message(message):
     if message.author.id in bots_blacklist:
