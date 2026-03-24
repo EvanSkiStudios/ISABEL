@@ -12,6 +12,9 @@ from llm_module.llm_create import LLM_CONFIG
 from ollama import Client, chat
 
 
+# todo -- Refactor this into its own pipe line like vision and chat
+
+
 # configure logging
 logger = setup_logger(__name__)
 

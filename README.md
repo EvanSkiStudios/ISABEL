@@ -12,8 +12,9 @@
  Be able to communicate with users vocally  
  Be able to be muted and defended with the help of slash commands
 
- ### About 
- (wiki coming soon) 
+### About 
+ [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/EvanSkiStudios/ISABEL)  [![GitHub Wiki](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/EvanSkiStudios/ISABEL/wiki)   
+ The wiki is currently experimental, and automated with the use of [devin.ai](https://devin.ai/)
  
  
  ### Images
