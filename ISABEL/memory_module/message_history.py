@@ -7,7 +7,8 @@ from utility_scripts.system_logging import setup_logger
 logger = setup_logger(__name__)
 
 channels_dict = {}
-MAX_CACHE_SIZE = 20
+MAX_CACHE_SIZE = 6
+CACHE_GATHER_AMNT = 4
 
 
 # for neuralize command
@@ -23,7 +24,7 @@ def get_channel_cache(channel_id) -> list:
     return channels_dict[channel_id]
 
 
-async def get_channel_message_cache(bot, message, amount=20) -> list:
+async def get_channel_message_cache(bot, message, amount=CACHE_GATHER_AMNT) -> list:
     channel_name = getattr(message.channel, "name", None)
 
     if channel_name is None:

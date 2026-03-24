@@ -59,6 +59,7 @@ MAX_HEIGHT = 448
 
 
 def download_attachments(message_attachments: list) -> dict:
+    logger.debug("Downloading Attachments...")
     if not message_attachments:
         return {}
 
@@ -111,6 +112,7 @@ def download_attachments(message_attachments: list) -> dict:
             pass
 
     # END
+    logger.debug("Finished Downloading Attachments")
     return gathered_attachments
 
 
@@ -126,7 +128,7 @@ async def digest_attachments(message_attachments):
         params = attachment["params"]
 
         # allowed images
-        if media_type == "image" and media_subtype in ("png", "jpeg", "webp"):
+        if media_type == "image" and media_subtype in ("png", "jpg", "jpeg", "webp"):
             image_data.append(file_path)
             continue
 

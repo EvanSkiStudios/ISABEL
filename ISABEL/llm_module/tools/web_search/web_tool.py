@@ -66,6 +66,8 @@ async def llm_internet_search(bot, message) -> list:
         # print('Content: ', response.message.content)
         pass
 
+    messages.append(response.message)
+
     # manage tools
     tool_calls = []
 
@@ -82,18 +84,42 @@ async def llm_internet_search(bot, message) -> list:
                 # execute tool function and append results in a message
                 args = tool_call.function.arguments
                 result = function_to_call(**args)
+                print('Result: ', str(result)[:200] + '...')
+
+                messages.append({
+                    'role': 'tool',
+                    'content': str(result)[:2000 * 4],
+                    'tool_name': tool_call.function.name
+                })
 
                 # get first result
-                first_result = result.results[0]  # get the first WebSearchResult
-                first_content = first_result.content  # get the content
-                logger.debug(first_content[:200])
+                # first_result = result.results[0]  # get the first WebSearchResult
+                # first_content = first_result.content  # get the content
+                # logger.debug(first_content[:200])
 
-                result_string = header + first_content + footer
+                # result_string = header + first_content + footer
 
-                tool_calls.append(result_string)
+                # tool_calls.append(result_string)
 
             else:
                 raise InvalidToolError(tool_call.function, tool_call.function.name)
+
+
+    final_response = await asyncio.to_thread(
+        chat,
+        model=CONFIG.TOOL_MODEL,
+        messages=messages,
+        options={
+            "num_ctx": CONFIG.DEFAULT_CONTEXT,
+            "temperature": CONFIG.DEFAULT_TEMPERATURE,
+            "think": True
+        },
+        tools=list(TOOLS.values()),
+        stream=False
+    )
+
+    print(final_response.message.content)
+    raise InvalidToolError
 
     return tool_calls
 
