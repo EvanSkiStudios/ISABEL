@@ -5,7 +5,7 @@ from llm_module.attachment_processing.sort_attachements import sort_attachments
 from llm_module.determine_request import classify_request
 from llm_module.generators.chat.llm_chat_response import llm_generate_response
 from llm_module.generators.vision.llm_vision_response import llm_generate_vision_response
-from llm_module.tools.web_search.web_tool import llm_internet_search
+from llm_module.generators.web_search.llm_web_response import llm_generate_web_response
 from utility_scripts.system_logging import setup_logger
 
 logger = setup_logger(__name__)
@@ -56,7 +56,7 @@ async def generate_response(bot, message, message_content):
         # ---------------------------------
         case "search":
             logger.info("Web search triggered")
-            return await llm_internet_search(bot, message)
+            return await llm_generate_web_response(bot, message)
 
         # ---------------------------------
         # weather
