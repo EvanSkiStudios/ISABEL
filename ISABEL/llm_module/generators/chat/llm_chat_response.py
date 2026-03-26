@@ -17,7 +17,8 @@ CONFIG = LLM_CONFIG.ISABEL
 
 # Main entry point
 async def llm_generate_response(bot, message, attachments=None):
-    message_cache = await get_channel_message_cache(bot, message)
+    # message_cache = await get_channel_message_cache(bot, message)
+    message_cache = []
 
     prompt_info = {
         "message_cache": message_cache,

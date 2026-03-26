@@ -17,10 +17,8 @@ async def build_system_prompt(bot, message, prompt_data):
     if file_data is None:
         file_data = {"text": None, "audio": None}
 
-    system_prompt = {
-        "role": "system", "content":
-            personality_system_prompt + "\n" + chat_history_system_prompt
-    }
+    system_prompt = {"role": "system", "content": personality_system_prompt}
+    # personality_system_prompt + "\n" + chat_history_system_prompt
 
     user_content = await process_message(bot, message)
     user_prompt = copy.deepcopy(user_content)
@@ -33,7 +31,8 @@ async def build_system_prompt(bot, message, prompt_data):
             user_prompt["content"] = audio_data
 
     # format message as described in chat history prompt
-    formated_content = "(NEW MESSAGE TO RESPOND TO): " + user_prompt["content"]
+    # formated_content = "(NEW MESSAGE TO RESPOND TO): " + user_prompt["content"]
+    formated_content = user_prompt["content"]
     user_prompt["content"] = formated_content
     cached_user_message = copy.deepcopy(user_content)
 
