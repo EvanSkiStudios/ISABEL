@@ -15,17 +15,17 @@ class Weather(commands.Cog):
     @app_commands.command(name="weather", description="gets the weather")
     async def weather(self, interaction, city: Optional[str] = "", state: Optional[str] = ""):
         logger.debug(f'Command issued: weather by {interaction.user}, {city}, {state}')
-        await interaction.response.defer()
+        await interaction.response.defer(ephemeral=True)
 
         # result = slash_get_weather(city, state)
         # todo -- Temp set to None while under refactor
         result = None
         if not result:
             logger.error('Weather Error')
-            await interaction.followup.send(f'Error getting weather for {city}, {state}')
+            await interaction.followup.send(f'Error getting weather for {city}, {state}', ephemeral=True)
             return
 
-        await interaction.followup.send(result)
+        await interaction.followup.send(result, ephemeral=True)
 
 
 async def setup(bot: commands.Bot):

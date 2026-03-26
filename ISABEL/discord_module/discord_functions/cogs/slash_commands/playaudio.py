@@ -20,10 +20,10 @@ class PlayAudio(commands.Cog):
     @app_commands.command(name="play", description="Play an mp3 file in your voice channel")
     async def play(self, interaction):
         logger.debug(f'Command issued: play by {interaction.user}')
-        await interaction.response.defer()
+        await interaction.response.defer(ephemeral=True)
 
         if not interaction.user.voice or not interaction.user.voice.channel:
-            await interaction.followup.send("You need to be in a voice channel to play audio!")
+            await interaction.followup.send("You need to be in a voice channel to play audio!", ephemeral=True)
             return
 
         channel = interaction.user.voice.channel
@@ -36,10 +36,11 @@ class PlayAudio(commands.Cog):
 
         if not voice_client.is_playing():
             voice_client.play(audio_source, after=lambda e: logger.debug(f"Playback finished: {e}"))
-            await interaction.followup.send("Playing audio now!")
+            await interaction.followup.send("Playing audio now!", ephemeral=True)
         else:
-            await interaction.followup.send("Already playing audio!")
+            await interaction.followup.send("Already playing audio!", ephemeral=True)
 
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(PlayAudio(bot))
+

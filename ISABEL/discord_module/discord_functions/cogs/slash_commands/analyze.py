@@ -1,11 +1,11 @@
 import os
-from types import SimpleNamespace
 from dotenv import load_dotenv
 
 import discord
 from discord import app_commands
 from discord.ext import commands
 
+from utility_scripts.namespace_utility import namespace
 from utility_scripts.system_logging import setup_logger
 
 # configure logging
@@ -15,15 +15,10 @@ logger = setup_logger(__name__)
 load_dotenv()
 
 
-def ns(d: dict) -> SimpleNamespace:
-    """Convert dict into a dot-accessible namespace (recursively)."""
-    return SimpleNamespace(**{k: ns(v) if isinstance(v, dict) else v for k, v in d.items()})
-
-
 config_dict = {
     "MASTER_USER_ID": os.getenv("MASTER_USER_ID"),
 }
-CONFIG = ns(config_dict)
+CONFIG = namespace(config_dict)
 
 
 def analyze_message(message):
@@ -67,8 +62,10 @@ class Analyze(commands.Cog):
         logger.debug(f'Command issued: analyze {interaction.user} | Message: {message_id}')
 
         if interaction.user.id != int(CONFIG.MASTER_USER_ID):
-            msg = await interaction.response.send_message("This is an Admin only command.",
-                                                          delete_after=6)
+            msg = await interaction.response.send_message(
+                "This is an Admin only command.",
+                ephemeral=True
+            )
             return
 
         try:
@@ -82,7 +79,7 @@ class Analyze(commands.Cog):
         except discord.HTTPException as e:
             logger.error(f"HTTP error: {e}")
 
-        msg = await interaction.response.send_message("Analysis sent to console", delete_after=6)
+        msg = await interaction.response.send_message("Analysis sent to console", ephemeral=True)
 
 
 async def setup(bot: commands.Bot):

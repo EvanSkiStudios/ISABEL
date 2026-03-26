@@ -21,7 +21,7 @@ class Join(commands.Cog):
     @app_commands.command(name="join", description="Have Isabel join your voice channel")
     async def Join(self, interaction):
         logger.debug(f'Command issued: join by {interaction.user}')
-        await interaction.response.defer()
+        await interaction.response.defer(ephemeral=True)
 
         if interaction.user.voice:
             channel = interaction.user.voice.channel
@@ -33,10 +33,10 @@ class Join(commands.Cog):
                 # await voice_client.move_to(channel)
                 await voice_client.disconnect()
                 voice_client = await channel.connect(cls=voice_recv.VoiceRecvClient)
-                msg = await interaction.followup.send(f"I have Moved to the voice channel: {channel.name}")
+                msg = await interaction.followup.send(f"I have Moved to the voice channel: {channel.name}", ephemeral=True)
             else:
                 voice_client = await channel.connect(cls=voice_recv.VoiceRecvClient)
-                msg = await interaction.followup.send(f"I have joined the voice channel: {channel.name}")
+                msg = await interaction.followup.send(f"I have joined the voice channel: {channel.name}", ephemeral=True)
 
             # create a folder for recordings if it doesn't exist
             os.makedirs("recordings", exist_ok=True)
@@ -55,7 +55,7 @@ class Join(commands.Cog):
             sink.cleanup()
 
         else:
-            msg = await interaction.followup.send("You are not in a voice channel!")
+            msg = await interaction.followup.send("You are not in a voice channel!", ephemeral=True)
 
         asyncio.create_task(delete_later(msg, 6))
 

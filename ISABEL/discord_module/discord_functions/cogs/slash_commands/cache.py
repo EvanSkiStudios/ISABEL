@@ -1,5 +1,4 @@
 import os
-from types import SimpleNamespace
 from dotenv import load_dotenv
 
 
@@ -7,6 +6,7 @@ from discord import app_commands
 from discord.ext import commands
 
 from memory_module.message_history import get_channel_message_cache
+from utility_scripts.namespace_utility import namespace
 from utility_scripts.system_logging import setup_logger
 
 # configure logging
@@ -16,15 +16,10 @@ logger = setup_logger(__name__)
 load_dotenv()
 
 
-def ns(d: dict) -> SimpleNamespace:
-    """Convert dict into a dot-accessible namespace (recursively)."""
-    return SimpleNamespace(**{k: ns(v) if isinstance(v, dict) else v for k, v in d.items()})
-
-
 config_dict = {
     "MASTER_USER_ID": os.getenv("MASTER_USER_ID"),
 }
-CONFIG = ns(config_dict)
+CONFIG = namespace(config_dict)
 
 
 class Cache(commands.Cog):
@@ -35,14 +30,16 @@ class Cache(commands.Cog):
     async def Cache(self, interaction, amount: int):
         logger.debug(f'Command issued: cache {interaction.user}, amount: {amount}')
 
+        await interaction.response.defer(ephemeral=True)
+
         if interaction.user.id != int(CONFIG.MASTER_USER_ID):
             msg = await interaction.response.send_message("This is an Admin only command.",
-                                                          delete_after=6)
+                                                          ephemeral=True)
             return
 
         await get_channel_message_cache(self.client, interaction, amount=amount)
 
-        msg = await interaction.response.send_message("cache complete", delete_after=6)
+        msg = await interaction.response.send_message("cache complete", ephemeral=True)
 
 
 async def setup(bot: commands.Bot):

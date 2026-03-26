@@ -20,6 +20,7 @@ class MyBot(commands.Bot):
             "discord_module.discord_functions.cogs.bot_commands",
             "discord_module.discord_functions.cogs.slash_commands.analyze",
             "discord_module.discord_functions.cogs.slash_commands.cache",
+            "discord_module.discord_functions.cogs.slash_commands.censor",
             "discord_module.discord_functions.cogs.slash_commands.delete",
             "discord_module.discord_functions.cogs.slash_commands.help",
             "discord_module.discord_functions.cogs.slash_commands.join",

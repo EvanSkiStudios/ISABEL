@@ -16,7 +16,7 @@ class Search(commands.Cog):
         await interaction.response.defer()
         # response = await llm_internet_search(f"search the web for: {query}")
         # await interaction.followup.send(response[0], suppress_embeds=True)
-        await interaction.followup.send("This command is currently unavailable", suppress_embeds=True)
+        await interaction.followup.send("This command is currently unavailable", suppress_embeds=True, ephemeral=True)
 
 
 async def setup(bot: commands.Bot):

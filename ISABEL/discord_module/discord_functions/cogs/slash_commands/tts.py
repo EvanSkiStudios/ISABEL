@@ -43,7 +43,7 @@ class TTS(commands.Cog):
 
         # Require at least one
         if not text and not message_id:
-            await interaction.followup.send("You must provide either text or a message ID.")
+            await interaction.followup.send("You must provide either text or a message ID.", ephemeral=True)
             return
 
         # If message_id is provided, fetch message
@@ -53,7 +53,7 @@ class TTS(commands.Cog):
                 text = message.content
             except Exception as e:
                 logger.error(f"Failed to fetch message: {e}")
-                await interaction.followup.send("Invalid message ID or message not found.")
+                await interaction.followup.send("Invalid message ID or message not found.", ephemeral=True)
                 return
 
         selected_voice = voice.value if voice else "default"
@@ -67,7 +67,7 @@ class TTS(commands.Cog):
                 # send YouTube video of spongebob clip of patrick "that was my last quarter"
                 await interaction.followup.send('https://youtu.be/c4MAh9nCddc?t=5')
             else:
-                await interaction.followup.send('Error making TTS. Probably out of cash.')
+                await interaction.followup.send('Error making TTS. Probably out of cash.', ephemeral=True)
             return
 
         await interaction.followup.send(file=discord.File(tts_file))

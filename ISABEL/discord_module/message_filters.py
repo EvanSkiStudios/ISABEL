@@ -1,17 +1,12 @@
 import os
 import discord
 
+from utility_scripts.namespace_utility import namespace
 from utility_scripts.system_logging import setup_logger
 from dotenv import load_dotenv
-from types import SimpleNamespace
 
 # configure logging
 logger = setup_logger(__name__)
-
-
-def ns(d: dict) -> SimpleNamespace:
-    """Convert dict into a dot-accessible namespace (recursively)."""
-    return SimpleNamespace(**{k: ns(v) if isinstance(v, dict) else v for k, v in d.items()})
 
 
 # Load Env
@@ -27,7 +22,7 @@ config_dict = {
         "FOOTNOTE": os.getenv("BOT_ID_FOOTNOTE")
     }
 }
-CONFIG = ns(config_dict)
+CONFIG = namespace(config_dict)
 bots_blacklist = [int(b) for b in CONFIG.BOTS.__dict__.values()]
 channels_whitelist = [int(t) for t in CONFIG.THREADS_ALLOW.__dict__.values()]
 

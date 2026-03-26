@@ -21,32 +21,38 @@ config_dict = {
 CONFIG = namespace(config_dict)
 
 
-class Delete(commands.Cog):
+class Censor(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @app_commands.command(name="delete", description="delete messages")
-    async def Delete(self, interaction, messages: str):
-        logger.debug(f'Command issued: delete by {interaction.user}')
+    @app_commands.command(name="censor", description="puts messages in spoilers")
+    async def Censor(self, interaction, message_ids: str):
+        logger.debug(f'Command issued: censor by {interaction.user}')
 
         await interaction.response.defer(ephemeral=True)
 
         if interaction.user.id != int(CONFIG.MASTER_USER_ID):
-            msg = await interaction.followup.send("This is an Admin only command.", ephemeral=True)
+            bot_msg = await interaction.followup.send(
+                "This is an Admin only command.",
+                ephemeral=True
+            )
             return
 
-        messages = [m.strip() for m in messages.split(',')]
+        split_message_ids = [m.strip() for m in message_ids.split(',')]
 
-        deleted = []
+        censored = []
         failed = []
 
-        for msg_id in messages:
+        for msg_id in split_message_ids:
             try:
                 msg_id = int(msg_id)
                 msg = await interaction.channel.fetch_message(msg_id)
                 if msg.author == self.client.user:
-                    await msg.delete()
-                    deleted.append(msg_id)
+
+                    if not msg.content.startswith("||"):
+                        await msg.edit(content=f"||{msg.content}||")
+                    censored.append(msg_id)
+
                 else:
                     failed.append((msg_id, "Not sent by bot"))
             except discord.NotFound:
@@ -57,14 +63,17 @@ class Delete(commands.Cog):
                 failed.append((msg_id, f"HTTP error: {e}"))
 
         report = []
-        if deleted:
-            report.append(f"✅ Deleted: {', '.join(map(str, deleted))}")
+        if censored:
+            report.append(f"✅ Censored: {', '.join(map(str, censored))}")
         if failed:
             report.append("❌ Failed:\n" + "\n".join(f"{i}: {reason}" for i, reason in failed))
 
         logger.debug("\n".join(report))
-        msg = await interaction.followup.send("Deleted: (" + str(len(deleted)) + ") Messages", ephemeral=True)
+        bot_msg = await interaction.followup.send(
+            f"Censored: ({len(censored)}) Messages",
+            ephemeral=True
+        )
 
 
 async def setup(bot: commands.Bot):
-    await bot.add_cog(Delete(bot))
+    await bot.add_cog(Censor(bot))

@@ -20,7 +20,7 @@ class Help(commands.Cog):
 For Full documentation see: [The S.A.M Wiki](<https://github.com/EvanSkiStudios/Smoke-And-Mirrors-AI/wiki>)
 """
 
-        await interaction.response.send_message(f"{help_string}")
+        await interaction.response.send_message(f"{help_string}", ephemeral=True)
 
 
 async def setup(bot: commands.Bot):

@@ -29,6 +29,8 @@ class Status(commands.Cog):
     async def Status(self, interaction, status: str = None):
         logger.debug(f'Command issued: status by {interaction.user}, {status}')
 
+        await interaction.response.defer(ephemeral=True)
+
         if status is not None:
             # max character limit
             arg = status[:128]
@@ -41,11 +43,11 @@ class Status(commands.Cog):
         # Get the new activity to respond with the new info about the status
         if activity is not None:
             if activity.type == discord.ActivityType.custom:
-                await interaction.response.send_message(f"Custom Status is now: {activity.name}")
+                await interaction.response.send_message(f"Custom Status is now: {activity.name}", ephemeral=True)
             else:
-                await interaction.response.send_message(f"Status is now: {discord_activity_mapper(activity)} {activity.name}")
+                await interaction.response.send_message(f"Status is now: {discord_activity_mapper(activity)} {activity.name}", ephemeral=True)
         else:
-            await interaction.response.send_message("Status has been cleared.")
+            await interaction.response.send_message("Status has been cleared.", ephemeral=True)
             logger.info("Status Cleared")
             return
 
