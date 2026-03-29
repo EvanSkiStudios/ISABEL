@@ -120,13 +120,13 @@ async def log_message(response: dict, sent_message, user_message: dict, full_his
     token_section = ""
     token_usage = response.get("token_usage")
     if token_usage:
-        prompt_tokens = token_usage.get("prompt_tokens", 0)
-        tokens_generated = token_usage.get("tokens_generated", 0)
-        total_tokens = token_usage.get("total_tokens", 0)
-        model_load_time = token_usage.get("model_load_time", 0)
-        prompt_processing_time = token_usage.get("prompt_processing_time", 0)
-        generation_time = token_usage.get("generation_time", 0)
-        total_duration = token_usage.get("total_duration", 0)
+        prompt_tokens = token_usage.get("prompt_tokens", 0) or 0
+        tokens_generated = token_usage.get("tokens_generated", 0) or 0
+        total_tokens = token_usage.get("total_tokens", 0) or 0
+        model_load_time = token_usage.get("model_load_time", 0) or 0
+        prompt_processing_time = token_usage.get("prompt_processing_time", 0) or 0
+        generation_time = token_usage.get("generation_time", 0) or 0
+        total_duration = token_usage.get("total_duration", 0) or 0
 
         token_text = (
             f"Tokens in Prompt: {prompt_tokens}<br>"

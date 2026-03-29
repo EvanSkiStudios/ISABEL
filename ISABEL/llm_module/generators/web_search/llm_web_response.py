@@ -26,6 +26,8 @@ async def llm_generate_web_response(bot, message, attachments=None):
     client = get_client()
 
     # Map tool names to actual functions
+    # todo -- We have tools and a loop, so what we can do is for example if a conversation is about a topic and asks the model to "web search {that}"
+    # todo -- we could have a tool to gather conversation context for what {that} is to feed back into itself
     TOOLS = {
         "web_search": client.web_search,
         "web_fetch": client.web_fetch

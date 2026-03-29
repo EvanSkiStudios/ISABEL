@@ -1,3 +1,4 @@
+import asyncio
 import os
 from dotenv import load_dotenv
 
@@ -5,6 +6,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
+from discord_module.utilities.message_delete_later import delete_later
 from utility_scripts.namespace_utility import namespace
 from utility_scripts.system_logging import setup_logger
 
@@ -73,6 +75,7 @@ class Censor(commands.Cog):
             f"Censored: ({len(censored)}) Messages",
             ephemeral=True
         )
+        asyncio.create_task(delete_later(bot_msg, 6))
 
 
 async def setup(bot: commands.Bot):

@@ -39,10 +39,12 @@ async def process_message(bot, message):
     reply_target_author = await get_replied_to_author_name(bot, message)
 
     if reply_target_author:
+        # return {'role': 'user', 'content': f'{author.name} ({author.display_name}) (Replying to: {reply_target_author}): {content}'}
         return {
             'role': 'user',
-            'content': f'{author.name} ({author.display_name}) (Replying to: {reply_target_author}): {content}'
+            'content': f'{author.name}: {content}'
         }
 
     # Regular user message
-    return {'role': 'user', 'content': f'{author.name} ({author.display_name}): {content}'}
+    # return {'role': 'user', 'content': f'{author.name} ({author.display_name}): {content}'}
+    return {'role': 'user', 'content': f'{author.name}: {content}'}

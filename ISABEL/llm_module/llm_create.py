@@ -20,10 +20,11 @@ os.environ["OLLAMA_API_KEY"] = os.getenv("OLLAMA_API")
 llm_config = {
     "ISABEL": {
         "MODEL_NAME": "ISABEL",
-        "OLLAMA_MODEL": "huihui_ai/deepseek-r1-abliterated",
-        "VISION_MODEL": "qwen3-vl:4b",
-        "TOOL_MODEL": "qwen3-vl:4b",
-        "DEFAULT_CONTEXT": 8192,
+        # "OLLAMA_MODEL": "huihui_ai/deepseek-r1-abliterated",
+        "OLLAMA_MODEL": "qwen3.5:397b-cloud",
+        "VISION_MODEL": "qwen3.5:397b-cloud",
+        "TOOL_MODEL": "qwen3.5:397b-cloud",
+        "DEFAULT_CONTEXT": 16384,
         "DEFAULT_TEMPERATURE": 0.6
     }
 }
