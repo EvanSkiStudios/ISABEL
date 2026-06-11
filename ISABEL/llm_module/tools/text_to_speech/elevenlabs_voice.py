@@ -49,7 +49,7 @@ def clean_text(text: str) -> str:
     return (text or "text_to_speech")[:14]
 
 
-async def text_to_speech(text: str, file_name='text_to_speech', voice="default"):
+async def text_to_speech(text: str, file_name='text_to_speech', voice="default", stability=0.5):
     logger.info("Starting TTS Message")
 
     if voice is not None:
@@ -65,7 +65,7 @@ async def text_to_speech(text: str, file_name='text_to_speech', voice="default")
                 model_id="eleven_v3",
                 output_format="mp3_44100_128",
                 voice_settings=VoiceSettings(
-                    stability=0.5,
+                    stability=float(stability),
                     use_speaker_boost=False,
                     similarity_boost=0.5,
                     style=0.5,

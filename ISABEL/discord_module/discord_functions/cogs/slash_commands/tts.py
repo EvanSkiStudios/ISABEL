@@ -36,7 +36,8 @@ class TTS(commands.Cog):
             interaction,
             text: str = None,
             message_id: str = None,
-            voice: app_commands.Choice[str] = None
+            voice: app_commands.Choice[str] = None,
+            stability: float = 0.5
     ):
         logger.debug(f'Command issued: tts by {interaction.user}, MessageID: {message_id}, Text: {text}, voice: {voice}')
         await interaction.response.defer()
@@ -58,7 +59,7 @@ class TTS(commands.Cog):
 
         selected_voice = voice.value if voice else "default"
 
-        tts_file = await text_to_speech(text, file_name=text, voice=selected_voice)
+        tts_file = await text_to_speech(text, file_name=text, voice=selected_voice, stability=stability)
         if not tts_file:
             logger.error('TTS Error')
 
