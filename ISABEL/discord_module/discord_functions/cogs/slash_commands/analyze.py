@@ -50,6 +50,7 @@ def analyze_message(message):
                 f"\n  Image: {embed.image}"
             )
 
+    details.append(f'\n  Message: {message}')
     logger.info("\n".join(details))
 
 
@@ -72,6 +73,7 @@ class Analyze(commands.Cog):
             msg_id = int(message_id)
             message = await interaction.channel.fetch_message(msg_id)
             analyze_message(message)
+
         except discord.NotFound:
             logger.error("Message not found")
         except discord.Forbidden:
